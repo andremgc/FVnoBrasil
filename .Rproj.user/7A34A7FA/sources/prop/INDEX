@@ -1,5 +1,7 @@
 ~%2F2020%2FFVnoBrasil%2FCodes%2FCrescimentoPorEstado.R="530D1481"
 ~%2F2020%2FFVnoBrasil%2FCodes%2FFunctions%2FAvaliaTempoEstrat.R="82190F71"
+~%2F2020%2FFVnoBrasil%2FCodes%2FFunctions%2FOperaNomes.R="5636FE7E"
+~%2F2020%2FFVnoBrasil%2FCodes%2FFunctions%2FProcessaCEP.R="C16AAA6C"
 ~%2F2020%2FFVnoBrasil%2FCodes%2FFunctions%2FiteraSiteANEEL.R="8F73ACA1"
 ~%2F2020%2FFVnoBrasil%2FCodes%2FSubsistemas.R="97B99130"
 ~%2F2020%2FFVnoBrasil%2FFunctions%2FProcessaCEP.R="9A9485E5"
@@ -7,3 +9,5 @@
 ~%2F2020%2FFVnoBrasil%2FFunctions%2FiteraSiteANEEL.R="BA137B88"
 ~%2F2020%2FFVnoBrasil%2FFunctions%2FiteraSiteAneel.R="84128714"
 ~%2F2020%2FFVnoBrasil%2FReports%2FRelatorioCompleto.Rmd="29A7FCCC"
+~%2F2020%2FFVnoBrasil%2FReports%2FTeste%2FRelatorioCompleto.html="14049E71"
+~%2F2020%2FFVnoBrasil%2FReports%2FTeste%2FRelatorioTeste.Rmd="3CC75370"

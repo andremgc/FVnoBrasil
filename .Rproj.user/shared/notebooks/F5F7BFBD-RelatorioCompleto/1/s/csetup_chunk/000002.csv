@@ -1,4 +1,4 @@
-"0","knitr::opts_chunk$set(echo = F, message =F, warning = F, fig.width = 10)"
+"0","knitr::opts_chunk$set(echo = F, message =F, warning = F, fig.width = 8)"
 "0",""
 "0","# Definir o diretório de trabalho como o pai "
 "0","#(dado que os relatorios encontram-se na subpasta Reports)"

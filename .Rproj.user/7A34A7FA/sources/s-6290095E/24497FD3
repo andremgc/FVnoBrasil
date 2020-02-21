@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1582310979938.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "24497FD3",
+    "lastKnownWriteTime" : 94496217713584,
+    "last_content_update" : 1582310979938,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "B3296224",
+        "caption" : "Cidades",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Cidades&cache_key=B3296224",
+        "displayedObservations" : "4111",
+        "environment" : "",
+        "expression" : "Cidades",
+        "object" : "Cidades",
+        "preview" : "0",
+        "totalObservations" : "4111",
+        "variables" : "4"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

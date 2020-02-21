@@ -27,18 +27,25 @@ suppressPackageStartupMessages({
         require("lubridate", quietly = TRUE, warn.conflicts = FALSE)
         require("plotly", quietly = TRUE, warn.conflicts = FALSE)
         require("gridExtra", quietly = TRUE, warn.conflicts = FALSE)
+        require("leaflet", quietly = TRUE, warn.conflicts = FALSE)
 })
 
 ```
 
 ```{r Data}
+source("./Codes/Functions/OperaNomes.R")
+
 uf <- readRDS( "./Data/Subsistemas.RDS")$uf
 
 ANEELCEP <- readRDS( "./Data/ANEELCEP.RDS") %>% 
         mutate(potencia_instalada_k_w =
                        str_replace_all(potencia_instalada_k_w,"\\.","") %>%
                        str_replace_all(",",".")  %>%
-                       as.numeric())
+                       as.numeric()) %>%
+        mutate(municipio_padronizado = OperaNomes(municipio))
+
+Cidades <- Cidades<-read.csv("./Data/Cidades.csv") %>%
+        mutate (municipio_padronizado = OperaNomes(nome_municipio))
 
 ```
 
@@ -76,7 +83,7 @@ base no código do usuário __hrbrmstr__
 uma vez que a página contem HTML mal formatado, fazendo com que o uso de
 bibliotecas como `rvest` não fosse suficiente para a realização do _web scraping_.
 
-A função `iteraSiteAneel()` permite a leitura das tabelas do site da ANEEL de
+A função `iteraSiteANEEL()` permite a leitura das tabelas do site da ANEEL de
 maneira iterativa. Inicialmente ela usa `getANEELData()` de modo a verificar o 
 número de páginas a serem iteradas, considerando
 o número de total de usinas e, em seguida, visita todas as páginas, obtendo dados
@@ -231,9 +238,64 @@ gp
 
 ```
 
-### Cidades de destaque
+A seguir, pode-se ver como é a distribuição espacial da potência instalada 
+de sistemas de GDFV entre estados.
 
 ```{r}
+DadosLatLong <- ANEELCEP %>% 
+        filter (tipo =="UFV" & classe == 'Residencial') %>% 
+        left_join(Cidades) 
+
+EstadosLatLong <-DadosLatLong %>% group_by(uf) %>% 
+    summarise(potencia_instalada=sum(potencia_instalada_k_w,na.rm=T)/1000,
+              latitude=median(latitude,na.rm=T),
+              longitude=median(longitude,na.rm=T),
+              n_sistemas = n())
+
+my_map <- EstadosLatLong %>% leaflet()%>%
+   addTiles()%>%
+    addCircles(lat=~latitude,
+               lng=~longitude,
+               radius = ~sqrt(potencia_instalada)*20000, 
+               weight = 1,
+               popup = ~uf)
+my_map
+
+```
+
+### Cidades
+
+O mapa interativo a seguir permite visualizar quantos sistemas há, em 
+cada cidade do Brasil que possuem pelo menos um sistema registrado. 
+
+```{r}
+
+my_map <- DadosLatLong %>% leaflet()%>%
+   addTiles()%>%
+    addMarkers(lat=~latitude,
+               lng=~longitude,
+               clusterOptions=markerClusterOptions())
+my_map
+
+```
+
+
+#### Cidades de destaque
+
+A tabela a seguir mostra as 15 cidades com mais sistemas instalados junto com
+as potências totais instaladas nestas cidades.
+
+```{r}
+
+Cidades <- ANEELCEP %>% filter(tipo =="UFV" & classe == 'Residencial') %>%
+        group_by(municipio, uf) %>% 
+        summarise(unidades_instaladas = n(),
+                  potencia_instalada = sum(potencia_instalada_k_w)/1000,
+                  ) %>%
+        arrange(desc(unidades_instaladas))
+        
+knitr::kable(head(Cidades, 15))
+        
 
 ```
 
