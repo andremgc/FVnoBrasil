@@ -1,5 +1,0 @@
-"0","source(""./Code/Functions/OperaNomes.R"")
-"
-"2","Error in file(filename, ""r"", encoding = encoding) : 
-  cannot open the connection
-"
