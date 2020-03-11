@@ -53,7 +53,25 @@ Cidades <- Cidades<-read.csv("./Data/Cidades.csv") %>%
 body {
 text-align: justify;
   font-family: Helvetica;
-  font-size: 13pt;}
+  font-size: 14pt;}
+h1{
+  font-size: 24pt;
+}
+h2{
+  font-size: 22pt;
+}
+h3{
+  font-size: 20pt;
+}
+h4{
+  font-size: 18pt;
+}
+h5{
+  font-size: 16pt;
+}
+h6{
+  font-size: 15pt;
+}
 </style>
 
 ## Introdução
@@ -101,7 +119,7 @@ feita uma breve automação de baixar os arquivos e extraí-los.
 Inicialmente, podemos avaliar o crescimento da GDFV no Brasil, como um todo.
 Pode ser visto, a seguir, que há um crescimento próximo de exponencial. De fato,
 utilizando-se de regressões, ou da própria análise visual, pode-se verificar que,
-atualmente, a cada ano, o total de potência instalada no Brasilmultiplica por 3.
+atualmente, a cada ano, o total de potência instalada no Brasil multiplica por 3.
 
 ```{r Crescimento da GDFV}
 Crescimento <- ANEELCEP %>% 
@@ -282,7 +300,7 @@ my_map
 
 #### Cidades de destaque
 
-A tabela a seguir mostra as 15 cidades com mais sistemas instalados junto com
+A tabela a seguir mostra as 10 cidades com mais sistemas instalados junto com
 as potências totais instaladas nestas cidades.
 
 ```{r}
@@ -294,24 +312,94 @@ Cidades <- ANEELCEP %>% filter(tipo =="UFV" & classe == 'Residencial') %>%
                   ) %>%
         arrange(desc(unidades_instaladas))
         
-knitr::kable(head(Cidades, 15))
+knitr::kable(head(Cidades, 10))
         
 
 ```
 
 
 
+#### Análise das Maiores Capitais
 
+São avaliadas, a seguir, as distribuições dos sistemas instalados por bairro 
+nas mais importantes capitais: Rio de Janeiro, Belo Horizonte e Brasília
 
+##### Rio de Janeiro:
 
+```{r rj}
 
-#### Análise das cidades
+RJ <- ANEELCEP %>% filter(tipo =="UFV" & classe == 'Residencial' &
+                            municipio == "Rio de Janeiro") %>% 
+        group_by(Bairro) %>%
+        summarise(sistemas_instalados = n(),
+                  potencia_instalada_kw = sum (potencia_instalada_k_w)) %>%
+        dplyr::arrange(desc(potencia_instalada_kw)) %>%
+        mutate(potencia_instalada_percentual = round(
+                       potencia_instalada_kw/sum(potencia_instalada_kw)*100,
+                       digits = 2),
+               sistemas_instalados_percentual = round(
+                       sistemas_instalados/sum(sistemas_instalados)*100,
+                       digits = 2)) %>%
+        select(Bairro, potencia_instalada_percentual, sistemas_instalados_percentual)
 
-
-```{r}
-
+knitr::kable(head(RJ, 5))
 ```
 
+##### Brasília:
 
+```{r br}
 
+BR <- ANEELCEP %>% filter(tipo =="UFV" & classe == 'Residencial' &
+                            municipio == "Brasília") %>% 
+        group_by(Bairro) %>%
+        summarise(sistemas_instalados = n(),
+                  potencia_instalada_kw = sum (potencia_instalada_k_w)) %>%
+        dplyr::arrange(desc(potencia_instalada_kw)) %>%
+        mutate(potencia_instalada_percentual = round(
+                       potencia_instalada_kw/sum(potencia_instalada_kw)*100,
+                       digits = 2),
+               sistemas_instalados_percentual = round(
+                       sistemas_instalados/sum(sistemas_instalados)*100,
+                       digits = 2)) %>%
+        select(Bairro, potencia_instalada_percentual, sistemas_instalados_percentual) %>%
+        filter (!is.na(Bairro))
 
+knitr::kable(head(BR, 5))
+```
+
+##### Belo Horizonte:
+
+```{r bh}
+
+BH <- ANEELCEP %>% filter(tipo =="UFV" & classe == 'Residencial' &
+                            municipio == "Belo Horizonte") %>% 
+        group_by(Bairro) %>%
+        summarise(sistemas_instalados = n(),
+                  potencia_instalada_kw = sum (potencia_instalada_k_w)) %>%
+        dplyr::arrange(desc(potencia_instalada_kw)) %>%
+        mutate(potencia_instalada_percentual = round(
+                       potencia_instalada_kw/sum(potencia_instalada_kw)*100,
+                       digits = 2),
+               sistemas_instalados_percentual = round(
+                       sistemas_instalados/sum(sistemas_instalados)*100,
+                       digits = 2)) %>%
+        select(Bairro, potencia_instalada_percentual, sistemas_instalados_percentual) %>%
+        filter (!is.na(Bairro))
+
+knitr::kable(head(BH, 5))
+```
+
+Pode-se verificar que, para as 3 capitais analisadas, há uma concentração de 
+potência instalada e de sistemas em bairros específicos de alta renda. Isto 
+pode ser problemático, uma vez que, quanto mais dispersa é a geração distribuída,
+menores são seus impactos negativos nas redes elétricas, e maiores os positivos.
+
+Outra questão que estes dados apresentam é a de que o atual modelo de compensação
+da GD é mais atrativo e vantajoso aos consumidores que possuem mais riquezas.
+Considerando que os potenciais benefícios da geração distribuída não pagam
+o preço que os geradores recebem em desconto na conta de luz, o que se dá
+principalmente pelo fato de que o recurso solar é imprevisível e variável,
+então, verifica-se que a atual situação da geração distribuída faz, indiretamente,
+uma transferência de renda dos menos favorecidos para os mais ricos. 
+
+Esses dois pontos sugerem que deve-se repensar o modelo da GD no Brasil.
